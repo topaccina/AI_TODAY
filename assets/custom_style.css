@@ -1,0 +1,46 @@
+* {
+    font-family: cursive;
+    font-size: 24px;
+    color: white;
+}
+
+/* a:not(:last-of-type) {
+    margin-right: 10px;
+} */
+
+
+
+.ico-bar {
+    margin: 10px;
+    font-size: 24px;
+}
+
+.content {
+    margin-left: 18rem;
+    margin-right: 2rem;
+    padding: 2rem 1rem;
+}
+
+.cont-skill {
+    margin: 20px;
+    padding: 2px 2px;
+    justify-content: center;
+    align-content: center;
+}
+
+.cont-flex {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    padding: 2px 2px;
+    justify-content: center;
+    align-content: center;
+
+}
+
+/******************/
+.nav-pills .nav-link.active {
+    color: #fff;
+    background-color: #0f2537;
+
+}
