@@ -26,7 +26,7 @@ sidebar = dbc.Card(
                             [
                                 dbc.NavLink("Home", href="/", active="Exact"),
                                 dbc.NavLink(
-                                    "Techical Performances",
+                                    "Technical Performances",
                                     href="/page-1",
                                     active="exact",
                                 ),

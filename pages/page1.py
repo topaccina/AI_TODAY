@@ -4,17 +4,58 @@ import dash
 import plotly.express as px
 import pandas as pd
 
-# from dash_bootstrap_templates import load_figure_template
-# load_figure_template("all")
-
 
 dash.register_page(__name__, path="/page-1", order=1)
 
-# slider labels
+# slider labels -- in place of pagination
 labels = dict(zip([1, 2, 3], ["AI1", "AI2", "AI3"]))
 
+# reference datasets
 df1 = pd.read_csv("./data/computer-chess-ability.csv")
 df2 = pd.read_csv("./data/performance-training-computation.csv")
+
+# plots setup
+fig1 = px.line(
+    df1,
+    x="Year",
+    y="Elo rating",
+    markers=True,
+)
+fig1.update_layout(
+    # template="seaborn",
+    title="Chess ability of the best computers",
+    # plot_bgcolor="rgba(0, 0, 0, 0)",
+    # paper_bgcolor="rgba(0, 0, 0, 0)",
+    showlegend=True,
+    xaxis=dict(
+        rangeslider=dict(visible=True, thickness=0.01),  # , bgcolor="#636EFA"
+        type="date",
+    ),
+    yaxis=dict(range=[200, 4000]),
+),
+# Add reference horizontal lines
+EloRef = pd.DataFrame(
+    {
+        "EloLevel": [2882, 2300, 1700, 800],
+        "LevelDescr": [
+            "Highest-rated human ever",
+            "Expert human player",
+            "Intermediate human player",
+            "Novice human player",
+        ],
+    }
+)
+for i in range(EloRef.shape[0]):
+    fig1.add_hline(
+        y=EloRef.EloLevel.loc[i],
+        line_dash="dot",
+        annotation_text=EloRef.LevelDescr.loc[i]
+        + " (Elo Rating of "
+        + str(EloRef.EloLevel.loc[i])
+        + ")",
+        annotation_position="bottom right",
+        line_color="green",
+    )
 
 fig2 = px.scatter(
     df2,
@@ -32,20 +73,6 @@ fig2.update_layout(
     # plot_bgcolor="rgba(0, 0, 0, 0)",
     # paper_bgcolor="rgba(0, 0, 0, 0)",
     title="Artificial intelligence: Performance on knowledge tests vs.training computation",
-),
-
-fig1 = px.line(
-    df1,
-    x="Year",
-    y="Elo rating",
-    markers=True,
-)
-fig1.update_layout(
-    template="seaborn",
-    title="Chess ability of the best computers",
-    # plot_bgcolor="rgba(0, 0, 0, 0)",
-    # paper_bgcolor="rgba(0, 0, 0, 0)",
-    showlegend=True,
 ),
 
 
