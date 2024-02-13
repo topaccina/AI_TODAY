@@ -130,9 +130,9 @@ layout = dbc.Container(
 @callback(Output("plot-id", "figure"), [Input("page-change", "value")])
 def change_page(value):
     if value == 1:
-        return fig1
-    elif value == 2:
         return fig2
+    elif value == 2:
+        return fig1
     else:
         return fig1
     return html.P("This shouldn't ever be displayed...")
