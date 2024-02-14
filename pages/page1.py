@@ -7,8 +7,6 @@ import pandas as pd
 
 dash.register_page(__name__, path="/page-1", order=1)
 
-# slider labels -- in place of pagination
-labels = dict(zip([1, 2, 3], ["AI1", "AI2", "AI3"]))
 
 # reference datasets
 df1 = pd.read_csv("./data/computer-chess-ability.csv")
@@ -91,43 +89,49 @@ plot2 = dbc.Container(
     className="cont-flex",
 )
 
-layout = dbc.Container(
-    [
-        dbc.Row(
-            [
-                dcc.Markdown("# Technical Performances", style={"textAlign": "left"}),
-                html.Hr(),
-                dcc.Markdown(
-                    "Keys Takeways.\n",
-                    style={"textAlign": "left", "white-space": "pre"},
-                ),
-                html.Hr(),
-            ],
-            # width=8,
-        ),
-        dbc.Row(
-            [
-                html.Div("Scroll the plot with the slider below"),
-                dcc.Slider(
-                    id="page-change",
-                    min=1,
-                    max=3,
-                    step=1,
-                    value=1,
-                    # marks={i: str(i) for i in range(1, 4)},
-                    marks=labels,
-                ),
-            ]
-        ),
-        html.Br(),
-        dbc.Row(
-            [dbc.Container([plot1], id="pagination-contents", className="")],
-        ),
-    ],
+layout = (
+    dbc.Container(
+        [
+            dbc.Row(
+                [
+                    dcc.Markdown(
+                        "# Technical Performances", style={"textAlign": "left"}
+                    ),
+                    html.Hr(),
+                    dcc.Markdown(
+                        "Keys Takeways.\n",
+                        style={"textAlign": "left", "white-space": "pre"},
+                    ),
+                    html.Hr(),
+                ],
+                # width=8,
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            dbc.Container(
+                                [plot1], id="pagination-contents", className=""
+                            )
+                        ],
+                        width=12,
+                    )
+                ]
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Pagination(id="pagination", max_value=3),
+                ]
+            ),
+        ],
+    ),
 )
 
 
-@callback(Output("plot-id", "figure"), [Input("page-change", "value")])
+@callback(
+    Output("plot-id", "figure"), [Input("pagination", "active_page")]
+)  # [Input("page-change", "value")])
 def change_page(value):
     if value == 1:
         return fig2

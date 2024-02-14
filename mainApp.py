@@ -1,6 +1,6 @@
 from dash import Dash, html, dcc, page_container
 import dash_bootstrap_components as dbc
-
+import dash
 
 app = Dash(
     __name__,
@@ -9,55 +9,26 @@ app = Dash(
     pages_folder="pages",
 )
 
-sidebar = dbc.Card(
-    [
-        dbc.CardHeader(html.H3("AI in Today's World")),
-        dbc.CardImg(
-            src=app.get_asset_url("AIPic.png"),
-            top=True,
-            style={"height": "auto", "width": "auto"},
-        ),
-        dbc.CardBody(
-            [
-                dbc.Container(
-                    [
-                        html.Hr(),
-                        dbc.Nav(
-                            [
-                                dbc.NavLink("Home", href="/", active="Exact"),
-                                dbc.NavLink(
-                                    "Technical Performances",
-                                    href="/page-1",
-                                    active="exact",
-                                ),
-                                dbc.NavLink(
-                                    "Industry and Economy",
-                                    href="/page-2",
-                                    active="exact",
-                                ),
-                                dbc.NavLink("Society", href="/page-3", active="exact"),
-                                html.Hr(),
-                                dbc.NavLink(
-                                    "About the Author", href="/page-4", active="exact"
-                                ),
-                            ],
-                            vertical=True,
-                            pills=True,
-                        ),
-                        html.Hr(),
-                    ]
-                ),
-            ]
-        ),
-    ],
-    className="",
-    style={"position": "fixed", "top": "5px", "bottom": "5px"},
-)
 
+navbar = dbc.NavbarSimple(
+    dbc.DropdownMenu(
+        [
+            dbc.DropdownMenuItem(page["name"], href=page["path"])
+            for page in dash.page_registry.values()
+            if page["module"] != "pages.not_found_404"
+        ],
+        nav=True,
+        label="More Pages",
+    ),
+    brand="Multi Page App Demo",
+    # color="primary",
+    dark=True,
+    className="mb-2",
+)
 content = html.Div(id="page-content", children=[page_container], className="content")
 
 app.layout = dbc.Container(
-    [dbc.Row([dbc.Col([sidebar, content])])], fluid=True, style={}
+    [dbc.Row([dbc.Col([navbar, content], width=12)])], fluid=True, style={}
 )
 
 
