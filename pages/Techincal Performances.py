@@ -67,10 +67,13 @@ fig2 = px.scatter(
     size_max=100,
 )
 fig2.update_layout(
-    template="seaborn",
+    # template="seaborn",
     # plot_bgcolor="rgba(0, 0, 0, 0)",
     # paper_bgcolor="rgba(0, 0, 0, 0)",
     title="Artificial intelligence: Performance on knowledge tests vs.training computation",
+    hoverlabel=dict(
+        font_size=12,
+    ),
 ),
 
 
@@ -84,10 +87,7 @@ plot1 = dbc.Container(
     ],
     fluid=True,
 )
-plot2 = dbc.Container(
-    children=[html.P("another")],
-    className="cont-flex",
-)
+
 
 layout = (
     dbc.Container(
@@ -134,9 +134,9 @@ layout = (
 )  # [Input("page-change", "value")])
 def change_page(value):
     if value == 1:
-        return fig2
-    elif value == 2:
         return fig1
+    elif value == 2:
+        return fig2
     else:
         return fig1
     return html.P("This shouldn't ever be displayed...")
