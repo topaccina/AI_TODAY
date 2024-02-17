@@ -3,7 +3,7 @@ from dash import Input, Output, dcc, html, callback
 import dash
 
 
-dash.register_page(__name__, path="/page-4", order=4)
+dash.register_page(__name__, path="/page-3", order=4)
 layout = dbc.Container(
     [
         dbc.Row(

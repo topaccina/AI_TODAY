@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.graph_objects as obj
 
 
-dash.register_page(__name__, path="/page-3", order=3)
+dash.register_page(__name__, path="/page-2", order=3)
 
 
 # reference datasets

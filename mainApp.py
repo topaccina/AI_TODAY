@@ -18,7 +18,7 @@ navbar = dbc.NavbarSimple(
             if page["module"] != "pages.not_found_404"
         ],
         nav=True,
-        label="More Pages",
+        label="AI Topics",
     ),
     brand="Multi Page App Demo",
     # color="primary",
