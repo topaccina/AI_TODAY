@@ -20,6 +20,18 @@ df1["%"] = (
 )
 # df2 = pd.read_csv("./data/performance-training-computation.csv")
 
+df2 = pd.read_csv("./data/market-share-chip-prod-stage.csv")
+df2 = pd.melt(
+    df2,
+    id_vars=["Entity", "Code", "Year"],
+    value_vars=["Design", "Fabrication", "Assembly, testing and packaging"],
+)
+print(df2)
+df2["% Market Shares"] = (
+    100 * df2["value"] / df2.groupby("variable")["value"].transform("sum")
+)
+df2["Country"] = df2.Entity + "-" + df2.Code
+print(df2)
 # plots setup
 fig1 = px.area(
     df1,
@@ -49,6 +61,31 @@ fig1.update_layout(
     yaxis=dict(range=[0, 100]),
 ),
 
+fig2 = px.bar(
+    df2,
+    y="Code",
+    x="% Market Shares",
+    color="Country",
+    facet_col="variable",
+    facet_col_wrap=2,
+    orientation="h",
+    facet_col_spacing=0.1,
+    text_auto=True,
+)
+fig2.update_yaxes(showticklabels=True)
+# fig2.update_xaxes(showticklabels=True)
+fig2.update_traces(hovertemplate=" %{y:.2f}%")  #
+fig2.update_layout(
+    # template="seaborn",
+    title="Market share for logic chip production, by manufacturing stage, 2021",
+    showlegend=True,
+    xaxis=dict(
+        showticklabels=True,
+    ),
+    hoverlabel=dict(
+        font_size=12,
+    ),
+),
 
 plot1 = dbc.Container(
     children=[
@@ -112,7 +149,7 @@ def change_page(value):
     if value == 1:
         return fig1
     elif value == 2:
-        return fig1
+        return fig2
     else:
         return fig1
     return html.P("This shouldn't ever be displayed...")
