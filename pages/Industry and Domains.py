@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.graph_objects as obj
 
 
-dash.register_page(__name__, path="/page-2", order=3)
+dash.register_page(__name__, path="/page-2", order=2)
 
 
 # reference datasets
@@ -26,12 +26,15 @@ df2 = pd.melt(
     id_vars=["Entity", "Code", "Year"],
     value_vars=["Design", "Fabrication", "Assembly, testing and packaging"],
 )
-print(df2)
+
 df2["% Market Shares"] = (
     100 * df2["value"] / df2.groupby("variable")["value"].transform("sum")
 )
 df2["Country"] = df2.Entity + "-" + df2.Code
-print(df2)
+
+df3 = pd.read_csv("./data/newly-funded-artificial-intelligence-companies.csv")
+
+
 # plots setup
 fig1 = px.area(
     df1,
@@ -45,6 +48,8 @@ fig1 = px.area(
         "Entity": True,  # add other column, default formatting
     },
 )
+
+
 fig1.update_traces(hovertemplate=" %{y:.2f}%")  #
 fig1.update_layout(
     # template="seaborn",
@@ -87,54 +92,66 @@ fig2.update_layout(
     ),
 ),
 
+# plots setup
+fig3 = px.line(
+    df3,
+    x="Year",
+    y="Number of newly founded AI companies",
+    markers=True,
+    color="Entity",
+)
+fig3.update_layout(
+    title="Newly-funded artificial intelligence companies",
+    showlegend=True,
+    xaxis=dict(
+        rangeslider=dict(visible=True, thickness=0.01),  # , bgcolor="#636EFA"
+        type="date",
+    ),
+    # yaxis=dict(range=[200, 4000]),
+),
+
 plot1 = dbc.Container(
     children=[
         dcc.Graph(
             figure=fig1,
             id="plot-id2",
-            style={"backgroundColor": "#254e6f", "height": "60vh"},
+            style={"backgroundColor": "#254e6f", "height": "40vh"},
         ),
     ],
     fluid=True,
 )
-plot2 = dbc.Container(
-    children=[html.P("another")],
-    className="cont-flex",
-)
+
 
 layout = (
     dbc.Container(
         [
             dbc.Row(
                 [
-                    dcc.Markdown(
-                        "# Industry and AI Domains", style={"textAlign": "left"}
+                    dbc.Col(
+                        [
+                            dcc.Markdown(
+                                "# Industry and AI Domains", style={"textAlign": "left"}
+                            ),
+                            html.Hr(),
+                            dbc.Pagination(id="pagination3", max_value=3),
+                            html.Hr(),
+                            # width=8,
+                        ]
                     ),
-                    html.Hr(),
-                    dcc.Markdown(
-                        "Keys Takeways.\n",
-                        style={"textAlign": "left", "white-space": "pre"},
-                    ),
-                    html.Hr(),
-                ],
-                # width=8,
+                ]
             ),
             dbc.Row(
                 [
                     dbc.Col(
                         [
                             dbc.Container(
-                                [plot1], id="pagination-contents", className=""
+                                [plot1],
+                                id="pagination-contents",
+                                className="",
                             )
                         ],
-                        width=12,
+                        width=10,
                     )
-                ]
-            ),
-            html.Br(),
-            dbc.Row(
-                [
-                    dbc.Pagination(id="pagination3", max_value=3),
                 ]
             ),
         ],
@@ -150,6 +167,8 @@ def change_page(value):
         return fig1
     elif value == 2:
         return fig2
+    elif value == 3:
+        return fig3
     else:
         return fig1
     return html.P("This shouldn't ever be displayed...")

@@ -2,6 +2,7 @@ from dash import Dash, html, dcc, page_container
 import dash_bootstrap_components as dbc
 import dash
 
+
 app = Dash(
     __name__,
     external_stylesheets=[dbc.themes.SUPERHERO, dbc.icons.BOOTSTRAP],
@@ -19,11 +20,9 @@ navbar = dbc.NavbarSimple(
         ],
         nav=True,
         label="AI Topics",
+        # className="mb-3 h2",
     ),
-    brand="Multi Page App Demo",
-    # color="primary",
-    dark=True,
-    className="mb-2",
+    className="mb-3 h3 fw-bold",
 )
 content = html.Div(id="page-content", children=[page_container], className="content")
 

@@ -1,9 +1,13 @@
 import dash_bootstrap_components as dbc
-from dash import Input, Output, dcc, html, callback
+from dash import Input, Output, dcc, html, callback, State
 import dash
 import plotly.express as px
 import pandas as pd
+import os
+from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
+from langchain_openai import ChatOpenAI, OpenAI
 
+API_KEY = "write your api key here"
 
 dash.register_page(__name__, path="/page-1", order=1)
 
@@ -20,10 +24,7 @@ fig1 = px.line(
     markers=True,
 )
 fig1.update_layout(
-    # template="seaborn",
     title="Chess ability of the best computers",
-    # plot_bgcolor="rgba(0, 0, 0, 0)",
-    # paper_bgcolor="rgba(0, 0, 0, 0)",
     showlegend=True,
     xaxis=dict(
         rangeslider=dict(visible=True, thickness=0.01),  # , bgcolor="#636EFA"
@@ -67,10 +68,7 @@ fig2 = px.scatter(
     size_max=100,
 )
 fig2.update_layout(
-    # template="seaborn",
-    # plot_bgcolor="rgba(0, 0, 0, 0)",
-    # paper_bgcolor="rgba(0, 0, 0, 0)",
-    title="Artificial intelligence: Performance on knowledge tests vs.training computation",
+    title="Artificial intelligence: Performance on knowledge tests (MMLU) vs.Training Computation",
     hoverlabel=dict(
         font_size=12,
     ),
@@ -82,7 +80,7 @@ plot1 = dbc.Container(
         dcc.Graph(
             figure=fig1,
             id="plot-id",
-            style={"backgroundColor": "#254e6f", "height": "60vh"},
+            style={"backgroundColor": "#254e6f", "height": "40vh"},
         ),
     ],
     fluid=True,
@@ -98,13 +96,9 @@ layout = (
                         "# Technical Performances", style={"textAlign": "left"}
                     ),
                     html.Hr(),
-                    dcc.Markdown(
-                        "Keys Takeways.\n",
-                        style={"textAlign": "left", "white-space": "pre"},
-                    ),
+                    dbc.Pagination(id="pagination", max_value=2),
                     html.Hr(),
                 ],
-                # width=8,
             ),
             dbc.Row(
                 [
@@ -114,14 +108,35 @@ layout = (
                                 [plot1], id="pagination-contents", className=""
                             )
                         ],
-                        width=12,
+                        width=10,
                     )
                 ]
             ),
-            html.Br(),
+            html.Hr(),
             dbc.Row(
                 [
-                    dbc.Pagination(id="pagination", max_value=3),
+                    dbc.Col(
+                        [
+                            dcc.Markdown(
+                                "#### Any question?... ask to the AI\n",
+                                style={"textAlign": "left", "white-space": "pre"},
+                            ),
+                            dbc.Input(
+                                id="input-id",
+                                placeholder="Type your question...",
+                                type="text",
+                            ),
+                            dbc.Col(
+                                dbc.Button(
+                                    id="btn", children="Get Insights", className="my-2"
+                                ),
+                                width=2,
+                            ),
+                            html.Br(),
+                            html.P(id="output-id"),
+                        ],
+                        width=10,
+                    ),
                 ]
             ),
         ],
@@ -140,3 +155,31 @@ def change_page(value):
     else:
         return fig1
     return html.P("This shouldn't ever be displayed...")
+
+
+@callback(
+    Output("output-id", "children"),
+    [
+        Input("btn", "n_clicks"),
+    ],
+    State("pagination", "active_page"),
+    State("input-id", "value"),
+    prevent_initial_call=True,
+)
+def data_insights(
+    _,
+    active_page,
+    value,
+):
+    chat = ChatOpenAI(openai_api_key=API_KEY, model_name="gpt-4", temperature=0.0)
+    # chat = ChatOpenAI(model_name="gpt-4", temperature=0.0)
+    if active_page == 1:
+        dataset = df1
+    else:
+        dataset = df2
+    print(value)
+    agent = create_pandas_dataframe_agent(chat, dataset, verbose=True)
+    question = f"{value}"
+    response = agent.invoke(question)
+    # print(type(response))
+    return f"{response['output']}"
