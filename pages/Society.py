@@ -1,11 +1,14 @@
 import dash_bootstrap_components as dbc
-from dash import Input, Output, dcc, html, callback
+from dash import Input, Output, dcc, html, callback, State
 import dash
 import plotly.express as px
 import pandas as pd
 
-import plotly.graph_objects as obj
+# import plotly.graph_objects as obj
+from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
+from langchain_openai import ChatOpenAI, OpenAI
 
+API_KEY = "write your api key here"
 
 dash.register_page(__name__, path="/page-3", order=3)
 
@@ -20,7 +23,7 @@ df2 = pd.read_csv(
 
 fig1 = px.bar(
     df1,
-    y="Entity",
+    y="Country",
     x="Perc.%",
     color="Opinion",
     orientation="h",
@@ -28,7 +31,7 @@ fig1 = px.bar(
 )
 fig1.update_yaxes(showticklabels=True)
 # fig2.update_xaxes(showticklabels=True)
-fig1.update_traces(hovertemplate=" %{y:.2f}%")  #
+fig1.update_traces(hovertemplate=" %{x:.2f}%", texttemplate=" %{x:.2f}%")  #
 fig1.update_layout(
     # template="seaborn",
     title="Views about AI's impact on society in the next 20 years by country-2021 ",
@@ -43,7 +46,7 @@ fig1.update_layout(
 
 fig2 = px.bar(
     df2,
-    y="Entity",
+    y="Group",
     x="Perc.%",
     color="Opinion",
     orientation="h",
@@ -51,7 +54,7 @@ fig2 = px.bar(
 )
 fig2.update_yaxes(showticklabels=True)
 # fig2.update_xaxes(showticklabels=True)
-fig2.update_traces(hovertemplate=" %{y:.2f}%")  #
+fig2.update_traces(hovertemplate=" %{x:.2f}%", texttemplate=" %{x:.2f}%")  #
 fig2.update_layout(
     # template="seaborn",
     title="Views about AI's impact on society in the next 20 years by demographic group-2021",
@@ -68,7 +71,7 @@ plot1 = dbc.Container(
         dcc.Graph(
             figure=fig1,
             id="plot-id3",
-            style={"backgroundColor": "#254e6f", "height": "40vh"},
+            style={"backgroundColor": "#254e6f", "height": "50vh"},
         ),
     ],
     fluid=True,
@@ -105,6 +108,33 @@ layout = (
                     )
                 ]
             ),
+            html.Hr(),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            dcc.Markdown(
+                                "#### Any question?... ask to the AI\n",
+                                style={"textAlign": "left", "white-space": "pre"},
+                            ),
+                            dbc.Input(
+                                id="input-id3",
+                                placeholder="Type your question...",
+                                type="text",
+                            ),
+                            dbc.Col(
+                                dbc.Button(
+                                    id="btn3", children="Get Insights", className="my-2"
+                                ),
+                                width=2,
+                            ),
+                            html.Br(),
+                            html.P(id="output-id3"),
+                        ],
+                        width=10,
+                    ),
+                ]
+            ),
         ],
     ),
 )
@@ -122,3 +152,31 @@ def change_page(value):
     else:
         return fig1
     return html.P("This shouldn't ever be displayed...")
+
+
+@callback(
+    Output("output-id3", "children"),
+    [
+        Input("btn3", "n_clicks"),
+    ],
+    State("pagination4", "active_page"),
+    State("input-id3", "value"),
+    prevent_initial_call=True,
+)
+def data_insights(
+    _,
+    active_page,
+    value,
+):
+    chat = ChatOpenAI(openai_api_key=API_KEY, model_name="gpt-4", temperature=0.0)
+    # chat = ChatOpenAI(model_name="gpt-4", temperature=0.0)
+    if active_page == 1:
+        dataset = df1
+    else:
+        dataset = df2
+    print(value)
+    agent = create_pandas_dataframe_agent(chat, dataset, verbose=True)
+    question = f"{value}"
+    response = agent.invoke(question)
+    # print(type(response))
+    return f"{response['output']}"

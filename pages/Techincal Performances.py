@@ -3,7 +3,7 @@ from dash import Input, Output, dcc, html, callback, State
 import dash
 import plotly.express as px
 import pandas as pd
-import os
+
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain_openai import ChatOpenAI, OpenAI
 
@@ -80,7 +80,7 @@ plot1 = dbc.Container(
         dcc.Graph(
             figure=fig1,
             id="plot-id",
-            style={"backgroundColor": "#254e6f", "height": "40vh"},
+            style={"backgroundColor": "#254e6f", "height": "50vh"},
         ),
     ],
     fluid=True,

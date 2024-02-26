@@ -1,24 +1,27 @@
 import dash_bootstrap_components as dbc
-from dash import Input, Output, dcc, html, callback
+from dash import Input, Output, dcc, html, callback, State
 import dash
 import plotly.express as px
 import pandas as pd
 
-import plotly.graph_objects as obj
+# import plotly.graph_objects as obj
+from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
+from langchain_openai import ChatOpenAI, OpenAI
 
+API_KEY = "write your api key here"
 
 dash.register_page(__name__, path="/page-2", order=2)
 
 
 # reference datasets
 df1 = pd.read_csv("./data/ai-systems-by-domain.csv")
-df1 = df1[df1.Entity != "Not specified"]
+df1 = df1[df1["AI domain"] != "Not specified"]
 df1["%"] = (
     100
     * df1["Cumulative number of AI systems by domain"]
     / df1.groupby("Year")["Cumulative number of AI systems by domain"].transform("sum")
 )
-# df2 = pd.read_csv("./data/performance-training-computation.csv")
+
 
 df2 = pd.read_csv("./data/market-share-chip-prod-stage.csv")
 df2 = pd.melt(
@@ -31,6 +34,8 @@ df2["% Market Shares"] = (
     100 * df2["value"] / df2.groupby("variable")["value"].transform("sum")
 )
 df2["Country"] = df2.Entity + "-" + df2.Code
+df2.rename(columns={"variable": "stage"}, inplace=True)
+
 
 df3 = pd.read_csv("./data/newly-funded-artificial-intelligence-companies.csv")
 
@@ -40,12 +45,12 @@ fig1 = px.area(
     df1,
     x="Year",
     y="%",  # "Cumulative number of AI systems by domain",
-    color="Entity",
+    color="AI domain",
     # text="Entity",
     hover_data={
         "Year": False,  # remove species from hover data
         "%": ":.2f",  # customize hover for column of y attribute
-        "Entity": True,  # add other column, default formatting
+        "AI domain": True,  # add other column, default formatting
     },
 )
 
@@ -71,7 +76,7 @@ fig2 = px.bar(
     y="Code",
     x="% Market Shares",
     color="Country",
-    facet_col="variable",
+    facet_col="stage",
     facet_col_wrap=2,
     orientation="h",
     facet_col_spacing=0.1,
@@ -115,7 +120,7 @@ plot1 = dbc.Container(
         dcc.Graph(
             figure=fig1,
             id="plot-id2",
-            style={"backgroundColor": "#254e6f", "height": "40vh"},
+            style={"backgroundColor": "#254e6f", "height": "50vh"},
         ),
     ],
     fluid=True,
@@ -154,6 +159,33 @@ layout = (
                     )
                 ]
             ),
+            html.Hr(),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            dcc.Markdown(
+                                "#### Any question?... ask to the AI\n",
+                                style={"textAlign": "left", "white-space": "pre"},
+                            ),
+                            dbc.Input(
+                                id="input-id2",
+                                placeholder="Type your question...",
+                                type="text",
+                            ),
+                            dbc.Col(
+                                dbc.Button(
+                                    id="btn2", children="Get Insights", className="my-2"
+                                ),
+                                width=2,
+                            ),
+                            html.Br(),
+                            html.P(id="output-id2"),
+                        ],
+                        width=10,
+                    ),
+                ]
+            ),
         ],
     ),
 )
@@ -172,3 +204,35 @@ def change_page(value):
     else:
         return fig1
     return html.P("This shouldn't ever be displayed...")
+
+
+@callback(
+    Output("output-id2", "children"),
+    [
+        Input("btn2", "n_clicks"),
+    ],
+    State("pagination3", "active_page"),
+    State("input-id2", "value"),
+    prevent_initial_call=True,
+)
+def data_insights(
+    _,
+    active_page,
+    value,
+):
+    chat = ChatOpenAI(openai_api_key=API_KEY, model_name="gpt-4", temperature=0.0)
+    # chat = ChatOpenAI(model_name="gpt-4", temperature=0.0)
+    if active_page == 1:
+        dataset = df1
+    elif active_page == 2:
+        dataset = df2
+    elif active_page == 3:
+        dataset = df3
+    else:
+        dataset = df1
+    print(value)
+    agent = create_pandas_dataframe_agent(chat, dataset, verbose=True)
+    question = f"{value}"
+    response = agent.invoke(question)
+    # print(type(response))
+    return f"{response['output']}"
