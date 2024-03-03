@@ -2,6 +2,10 @@
 Multipage Dash app  showing Interactive Charts on Artificial Intelligence trends.<br>
 Each page focus on different topic<br>
 Final Goal is to embed AI capabilities to generate plots description on demand<br>
+Data insights can be generated through Langchain Pandas Agents than interact with Pandas Dataframes.<br>
+llm model gpt-4 is used under the hood. You need to have proper OPEN_AI_API suitable to run this model.<br>
+the Agent has been tested with gpt-3.5-turbo but lower insights quality and success rate.<br>
+
 Under development-to join the [Charming Data Community](https://charming-data.circle.so/c/ai-python-projects/) Project initiative <br>
 Part of this work is based on:<br>
 ["Artificial Intelligence"](https://ourworldindata.org/artificial-intelligence) Published online at OurWorldInData.org: 
