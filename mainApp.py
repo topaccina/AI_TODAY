@@ -1,4 +1,5 @@
-from dash import Dash, html, dcc, page_container
+# package imports
+from dash import Dash, html, page_container
 import dash_bootstrap_components as dbc
 import dash
 
@@ -20,7 +21,6 @@ navbar = dbc.NavbarSimple(
         ],
         nav=True,
         label="AI Topics",
-        # className="mb-3 h2",
     ),
     className="mb-3 h3 fw-bold",
 )

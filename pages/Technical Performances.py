@@ -1,28 +1,31 @@
-# package imports
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html, callback, State, ctx
 import dash
+
+# import plotly.express as px
+# import pandas as pd
+
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain_openai import ChatOpenAI, OpenAI
 
 # local imports
-from components.get_components_page2 import get_components_page2
+from components.get_components_page1 import get_components_page1
 from utils.settings import getEnvVar
 
 # env variables
 API_KEY = getEnvVar()
 
 # get data and viz
-dfList, vizList = get_components_page2()
+dfList, vizList = get_components_page1()
 
-dash.register_page(__name__, path="/page-2", order=2)
+dash.register_page(__name__, path="/page-1", order=1)
 
 
 plot = dbc.Container(
     children=[
         dcc.Graph(
             figure=vizList[0],
-            id="plot-id2",
+            id="plot-id",
             style={"backgroundColor": "#254e6f", "height": "50vh"},
         ),
     ],
@@ -35,30 +38,20 @@ layout = (
         [
             dbc.Row(
                 [
-                    dbc.Col(
-                        [
-                            dcc.Markdown(
-                                "# Industry and AI Domains", style={"textAlign": "left"}
-                            ),
-                            html.Hr(),
-                            dbc.Pagination(
-                                id="pagination3", max_value=len(vizList), active_page=1
-                            ),
-                            html.Hr(),
-                        ]
+                    dcc.Markdown(
+                        "# Technical Performances", style={"textAlign": "left"}
                     ),
-                ]
+                    html.Hr(),
+                    dbc.Pagination(
+                        id="pagination", max_value=len(vizList), active_page=1
+                    ),
+                    html.Hr(),
+                ],
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        [
-                            dbc.Container(
-                                [plot],
-                                id="pagination-contents",
-                                className="",
-                            )
-                        ],
+                        [dbc.Container([plot], id="pagination-contents", className="")],
                         width=10,
                     )
                 ]
@@ -73,27 +66,26 @@ layout = (
                                 style={"textAlign": "left", "white-space": "pre"},
                             ),
                             dbc.Input(
-                                id="input-id2",
+                                id="input-id",
                                 placeholder="Type your question...",
                                 type="text",
                             ),
                             dbc.Col(
                                 [
                                     dbc.Button(
-                                        id="btn2",
+                                        id="btn",
                                         children="Get Insights",
                                         className="m-3",
                                     ),
                                     dbc.Button(
-                                        id="btn2-reset",
+                                        id="btn-reset",
                                         children="Reset",
                                         className="m-3",
                                     ),
                                 ],
-                                # width=12,
                             ),
                             html.Br(),
-                            dcc.Loading(children=html.P(id="output-id2")),
+                            dcc.Loading(children=html.P(id="output-id")),
                         ],
                         width=10,
                     ),
@@ -105,20 +97,19 @@ layout = (
 
 
 @callback(
-    Output("plot-id2", "figure"),
-    [Input("pagination3", "active_page")],
+    Output("plot-id", "figure"),
+    [Input("pagination", "active_page")],
     prevent_initial_call=True,
-)
+)  # [Input("page-change", "value")])
 def change_page(active_page):
     return vizList[active_page - 1]
 
 
-# )
 @callback(
-    Output("output-id2", "children"),
-    [Input("btn2", "n_clicks"), Input("btn2-reset", "n_clicks")],
-    State("pagination3", "active_page"),
-    State("input-id2", "value"),
+    Output("output-id", "children"),
+    [Input("btn", "n_clicks"), Input("btn-reset", "n_clicks")],
+    State("pagination", "active_page"),
+    State("input-id", "value"),
     prevent_initial_call=True,
 )
 def data_insights(
