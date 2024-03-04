@@ -34,6 +34,7 @@ dash-app-structure
 |-- utils
 |   |-- settings.py
 |-- MainApp.py
+|--requirements.txt
 ```
 
 <br>
@@ -44,3 +45,6 @@ code to retrieve the environment vars (OPENAI_API_KEY)
 data prep and vizs code for each page. Each page is stand-alone
 ## pages
 page layout code and callbacks
+## python version
+python310
+
