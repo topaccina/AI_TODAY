@@ -34,6 +34,8 @@ dash-app-structure
 |-- utils
 |   |-- settings.py
 |-- MainApp.py
+|-- requirements.txt
+
 ```
 
 <br>
