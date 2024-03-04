@@ -1,6 +1,4 @@
-# import dash_bootstrap_components as dbc
-# from dash import Input, Output, dcc, html, callback, State
-# import dash
+from dash import dash_table
 import plotly.express as px
 import pandas as pd
 
@@ -17,7 +15,7 @@ def get_components_page2():
         / df1.groupby("Year")["Cumulative number of AI systems by domain"].transform(
             "sum"
         )
-    )
+    ).round(2)
     ##
     df2 = pd.read_csv("./data/market-share-chip-prod-stage.csv")
     df2 = pd.melt(
@@ -25,9 +23,10 @@ def get_components_page2():
         id_vars=["Entity", "Code", "Year"],
         value_vars=["Design", "Fabrication", "Assembly, testing and packaging"],
     )
-    df2["% Market Shares"] = (
-        100 * df2["value"] / df2.groupby("variable")["value"].transform("sum")
-    )
+    # df2["% Market Shares"] = (
+    #     100 * df2["value"] / df2.groupby("variable")["value"].transform("sum")
+    # )
+    df2.rename(columns={"value": "% Market Shares"}, inplace=True)
     df2["Country"] = df2.Entity + "-" + df2.Code
     df2.rename(columns={"variable": "stage"}, inplace=True)
     ##
@@ -91,7 +90,7 @@ def get_components_page2():
         x="Year",
         y="Number of newly founded AI companies",
         markers=True,
-        color="Entity",
+        color="Country",
     )
     fig3.update_layout(
         title="Newly-funded artificial intelligence companies",
@@ -102,4 +101,68 @@ def get_components_page2():
         ),
     ),
 
-    return ([df1, df2, df3], [fig1, fig2, fig3])
+    table1 = dash_table.DataTable(
+        df1.to_dict("records"),
+        [{"name": i, "id": i} for i in df1.columns],
+        page_size=10,
+        style_data={
+            "color": "black",
+            "backgroundColor": "white",
+        },
+        style_header={
+            "color": "white",
+            "backgroundColor": "black",
+        },
+        style_cell={
+            "height": "auto",
+            # all three widths are needed
+            "minWidth": "180px",
+            "width": "180px",
+            "maxWidth": "180px",
+            "whiteSpace": "normal",
+        },
+    )
+    table2 = dash_table.DataTable(
+        df2.to_dict("records"),
+        [{"name": i, "id": i} for i in df2.columns],
+        page_size=10,
+        style_data={
+            "color": "black",
+            "backgroundColor": "white",
+        },
+        style_header={
+            "color": "white",
+            "backgroundColor": "black",
+        },
+        style_cell={
+            "height": "auto",
+            # all three widths are needed
+            "minWidth": "180px",
+            "width": "180px",
+            "maxWidth": "180px",
+            "whiteSpace": "normal",
+        },
+    )
+    table3 = dash_table.DataTable(
+        df3.to_dict("records"),
+        [{"name": i, "id": i} for i in df3.columns],
+        page_size=10,
+        style_data={
+            "color": "black",
+            "backgroundColor": "white",
+        },
+        style_header={
+            "color": "white",
+            "backgroundColor": "black",
+        },
+        style_cell={
+            "height": "auto",
+            # all three widths are needed
+            "minWidth": "180px",
+            "width": "180px",
+            "maxWidth": "180px",
+            "whiteSpace": "normal",
+        },
+    )
+
+    return ([df1, df2, df3], [fig1, fig2, fig3], [table1, table2, table3])

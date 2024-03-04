@@ -13,7 +13,7 @@ from utils.settings import getEnvVar
 API_KEY = getEnvVar()
 
 # get data and viz
-dfList, vizList = get_components_page2()
+dfList, vizList, tableList = get_components_page2()
 
 dash.register_page(__name__, path="/page-2", order=2)
 
@@ -25,6 +25,29 @@ plot = dbc.Container(
             id="plot-id2",
             style={"backgroundColor": "#254e6f", "height": "50vh"},
         ),
+        # dbc.Tabs(
+        #     [
+        #         dbc.Tab(
+        #             [
+        #                 html.Br(),
+        #                 dcc.Graph(
+        #                     figure=vizList[0],
+        #                     id="plot-id2",
+        #                     style={"backgroundColor": "#254e6f", "height": "50vh"},
+        #                 ),
+        #             ],
+        #             label="plot",
+        #             id="tab-plot2",
+        #         ),
+        #         dbc.Tab(
+        #             children=[tableList[0]],
+        #             label="data",
+        #             id="tab-table2",
+        #             className="m-3",
+        #         ),
+        #     ],
+        #     active_tab="tab-plot2",
+        # )
     ],
     fluid=True,
 )
@@ -113,6 +136,15 @@ def change_page(active_page):
     return vizList[active_page - 1]
 
 
+# @callback(
+#     Output("tab-table2", "children"),
+#     [Input("pagination3", "active_page")],
+#     prevent_initial_call=True,
+# )
+# def change_page(active_page):
+#     return tableList[active_page - 1]
+
+
 # )
 @callback(
     Output("output-id2", "children"),
@@ -128,7 +160,7 @@ def data_insights(
     value,
 ):
     button_clicked = ctx.triggered_id
-    if button_clicked == "btn":
+    if button_clicked == "btn2":
         chat = ChatOpenAI(openai_api_key=API_KEY, model_name="gpt-4", temperature=0.0)
         dataset = dfList[active_page - 1]
         agent = create_pandas_dataframe_agent(chat, dataset, verbose=True)
@@ -142,5 +174,5 @@ def data_insights(
             except:
                 resp_output = "Sorry, your question is out of context"
         return resp_output
-    else:
+    elif button_clicked == "btn2-reset":
         return ""

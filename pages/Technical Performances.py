@@ -16,7 +16,7 @@ from utils.settings import getEnvVar
 API_KEY = getEnvVar()
 
 # get data and viz
-dfList, vizList = get_components_page1()
+dfList, vizList, tableList = get_components_page1()
 
 dash.register_page(__name__, path="/page-1", order=1)
 
@@ -133,5 +133,5 @@ def data_insights(
             except:
                 resp_output = "Sorry, your question is out of context"
         return resp_output
-    else:
+    elif button_clicked == "btn-reset":
         return ""
