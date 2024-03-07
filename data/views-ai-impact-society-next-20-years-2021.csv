@@ -1,56 +1,56 @@
-Country,Code,Year,Opinion,Perc.%,,
-Canada,CAN,2021,Mostly help,39.70297,,
-China,CHN,2021,Mostly help,61,,
-France,FRA,2021,Mostly help,39.7,,
-Germany,DEU,2021,Mostly help,59.8,,
-India,IND,2021,Mostly help,32.5,,
-Indonesia,IDN,2021,Mostly help,21.542803,,
-Italy,ITA,2021,Mostly help,50.2,,
-Japan,JPN,2021,Mostly help,61.48515,,
-Pakistan,PAK,2021,Mostly help,19.3,,
-United Kingdom,GBR,2021,Mostly help,46.7,,
-United States,USA,2021,Mostly help,35.024876,,
-Canada,CAN,2021,Neither,0.7920792,,
-China,CHN,2021,Neither,4.3142858,,
-France,FRA,2021,Neither,5,,
-Germany,DEU,2021,Neither,10.4,,
-India,IND,2021,Neither,1.7666667,,
-Indonesia,IDN,2021,Neither,0.752587,,
-Italy,ITA,2021,Neither,7.8,,
-Japan,JPN,2021,Neither,5.0495048,,
-Pakistan,PAK,2021,Neither,1.9,,
-United Kingdom,GBR,2021,Neither,5.1,,
-United States,USA,2021,Neither,0.99502486,,
-Canada,CAN,2021,NO response,0.0990099,,
-China,CHN,2021,NO response,0.057142857,,
-France,FRA,2021,NO response,,,
-Germany,DEU,2021,NO response,,,
-India,IND,2021,NO response,0.3,,
-Indonesia,IDN,2021,NO response,0.09407338,,
-Italy,ITA,2021,NO response,,,
-Japan,JPN,2021,NO response,,,
-Pakistan,PAK,2021,NO response,0.2,,
-United Kingdom,GBR,2021,NO response,0.1,,
-United States,USA,2021,NO response,0.39800996,,
-Canada,CAN,2021,No opinion,30.49505,,
-China,CHN,2021,No opinion,21.742857,,
-France,FRA,2021,No opinion,19.1,,
-Germany,DEU,2021,No opinion,11.8,,
-India,IND,2021,No opinion,29.6,,
-Indonesia,IDN,2021,No opinion,44.120415,,
-Italy,ITA,2021,No opinion,9.7,,
-Japan,JPN,2021,No opinion,20.29703,,
-Pakistan,PAK,2021,No opinion,26.5,,
-United Kingdom,GBR,2021,No opinion,19.6,,
-United States,USA,2021,No opinion,28.756218,,
-Canada,CAN,2021,Mostly harm,28.91089,,
-China,CHN,2021,Mostly harm,12.885715,,
-France,FRA,2021,Mostly harm,36.2,,
-Germany,DEU,2021,Mostly harm,18,,
-India,IND,2021,Mostly harm,35.833332,,
-Indonesia,IDN,2021,Mostly harm,33.490124,,
-Italy,ITA,2021,Mostly harm,32.3,,
-Japan,JPN,2021,Mostly harm,13.168317,,
-Pakistan,PAK,2021,Mostly harm,52.1,,
-United Kingdom,GBR,2021,Mostly harm,28.5,,
-United States,USA,2021,Mostly harm,34.82587,,
+Country,Code,Year,Opinion,Perc.%
+Canada,CAN,2021,Mostly help,39.70297
+China,CHN,2021,Mostly help,61
+France,FRA,2021,Mostly help,39.7
+Germany,DEU,2021,Mostly help,59.8
+India,IND,2021,Mostly help,32.5
+Indonesia,IDN,2021,Mostly help,21.542803
+Italy,ITA,2021,Mostly help,50.2
+Japan,JPN,2021,Mostly help,61.48515
+Pakistan,PAK,2021,Mostly help,19.3
+United Kingdom,GBR,2021,Mostly help,46.7
+United States,USA,2021,Mostly help,35.024876
+Canada,CAN,2021,Neither,0.7920792
+China,CHN,2021,Neither,4.3142858
+France,FRA,2021,Neither,5
+Germany,DEU,2021,Neither,10.4
+India,IND,2021,Neither,1.7666667
+Indonesia,IDN,2021,Neither,0.752587
+Italy,ITA,2021,Neither,7.8
+Japan,JPN,2021,Neither,5.0495048
+Pakistan,PAK,2021,Neither,1.9
+United Kingdom,GBR,2021,Neither,5.1
+United States,USA,2021,Neither,0.99502486
+Canada,CAN,2021,NO response,0.0990099
+China,CHN,2021,NO response,0.057142857
+France,FRA,2021,NO response,
+Germany,DEU,2021,NO response,
+India,IND,2021,NO response,0.3
+Indonesia,IDN,2021,NO response,0.09407338
+Italy,ITA,2021,NO response,
+Japan,JPN,2021,NO response,
+Pakistan,PAK,2021,NO response,0.2
+United Kingdom,GBR,2021,NO response,0.1
+United States,USA,2021,NO response,0.39800996
+Canada,CAN,2021,No opinion,30.49505
+China,CHN,2021,No opinion,21.742857
+France,FRA,2021,No opinion,19.1
+Germany,DEU,2021,No opinion,11.8
+India,IND,2021,No opinion,29.6
+Indonesia,IDN,2021,No opinion,44.120415
+Italy,ITA,2021,No opinion,9.7
+Japan,JPN,2021,No opinion,20.29703
+Pakistan,PAK,2021,No opinion,26.5
+United Kingdom,GBR,2021,No opinion,19.6
+United States,USA,2021,No opinion,28.756218
+Canada,CAN,2021,Mostly harm,28.91089
+China,CHN,2021,Mostly harm,12.885715
+France,FRA,2021,Mostly harm,36.2
+Germany,DEU,2021,Mostly harm,18
+India,IND,2021,Mostly harm,35.833332
+Indonesia,IDN,2021,Mostly harm,33.490124
+Italy,ITA,2021,Mostly harm,32.3
+Japan,JPN,2021,Mostly harm,13.168317
+Pakistan,PAK,2021,Mostly harm,52.1
+United Kingdom,GBR,2021,Mostly harm,28.5
+United States,USA,2021,Mostly harm,34.82587

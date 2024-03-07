@@ -30,34 +30,25 @@ plot = dbc.Container(
             id="plot-id3",
             style={"backgroundColor": "#254e6f", "height": "50vh"},
         ),
-        # dbc.Tabs(
-        #     [
-        #         dbc.Tab(
-        #             [
-        #                 html.Br(),
-        #                 dcc.Graph(
-        #                     figure=vizList[0],
-        #                     id="plot-id3",
-        #                     style={"backgroundColor": "#254e6f", "height": "50vh"},
-        #                 ),
-        #             ],
-        #             label="plot",
-        #             id="tab-plot3",
-        #         ),
-        #         dbc.Tab(
-        #             children=[tableList[0]],
-        #             label="data",
-        #             id="tab-table3",
-        #             className="m-3",
-        #         ),
-        #     ],
-        #     active_tab="tab-plot3",
-        #     id="tabs3",
-        # )
     ],
     fluid=True,
 )
-
+collapse = dbc.Container(
+    [
+        dbc.Button(
+            "Show Data Table",
+            id="collapse-button3",
+            className="mb-3",
+            color="primary",
+            n_clicks=0,
+        ),
+        dbc.Collapse(
+            children=[tableList[0]],
+            id="collapse3",
+            is_open=False,
+        ),
+    ]
+)
 
 layout = (
     dbc.Container(
@@ -86,6 +77,17 @@ layout = (
                                 id="pagination-contents",
                                 className="",
                             )
+                        ],
+                        width=10,
+                    )
+                ]
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            collapse,
                         ],
                         width=10,
                     )
@@ -141,13 +143,19 @@ def change_page(active_page):
     return vizList[active_page - 1]
 
 
-# @callback(
-#     Output("tab-table3", "children"),
-#     [Input("pagination4", "active_page")],
-#     prevent_initial_call=True,
-# )
-# def change_page(active_page):
-#     return tableList[active_page - 1]
+@callback(
+    Output("collapse3", "is_open"),
+    Output("collapse3", "children"),
+    [Input("collapse-button3", "n_clicks")],
+    [
+        State("collapse3", "is_open"),
+        State("pagination4", "active_page"),
+    ],
+    prevent_initial_call=True,
+)
+def toggle_collapse(n, is_open, active_page):
+    if n:
+        return not is_open, tableList[active_page - 1]
 
 
 @callback(

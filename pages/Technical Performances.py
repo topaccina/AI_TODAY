@@ -32,7 +32,22 @@ plot = dbc.Container(
     fluid=True,
 )
 
-
+collapse = dbc.Container(
+    [
+        dbc.Button(
+            "Show Data Table",
+            id="collapse-button",
+            className="mb-3",
+            color="primary",
+            n_clicks=0,
+        ),
+        dbc.Collapse(
+            children=[tableList[0]],
+            id="collapse",
+            is_open=False,
+        ),
+    ]
+)
 layout = (
     dbc.Container(
         [
@@ -52,6 +67,17 @@ layout = (
                 [
                     dbc.Col(
                         [dbc.Container([plot], id="pagination-contents", className="")],
+                        width=10,
+                    )
+                ]
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            collapse,
+                        ],
                         width=10,
                     )
                 ]
@@ -103,6 +129,21 @@ layout = (
 )  # [Input("page-change", "value")])
 def change_page(active_page):
     return vizList[active_page - 1]
+
+
+@callback(
+    Output("collapse", "is_open"),
+    Output("collapse", "children"),
+    [Input("collapse-button", "n_clicks")],
+    [
+        State("collapse", "is_open"),
+        State("pagination", "active_page"),
+    ],
+    prevent_initial_call=True,
+)
+def toggle_collapse(n, is_open, active_page):
+    if n:
+        return not is_open, tableList[active_page - 1]
 
 
 @callback(

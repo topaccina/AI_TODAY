@@ -57,9 +57,9 @@ def get_components_page1():
         x="Training compute (petaFLOP)",
         y="MMLU average",
         size="Training dataset size",
-        color="Organisation",
-        hover_name="Entity",
-        text="Entity",
+        color="Organization",
+        hover_name="Model",
+        text="Model",
         log_x=True,
         size_max=100,
     )

@@ -20,14 +20,14 @@ def get_components_page2():
     df2 = pd.read_csv("./data/market-share-chip-prod-stage.csv")
     df2 = pd.melt(
         df2,
-        id_vars=["Entity", "Code", "Year"],
+        id_vars=["Country", "Code", "Year"],
         value_vars=["Design", "Fabrication", "Assembly, testing and packaging"],
     )
     # df2["% Market Shares"] = (
     #     100 * df2["value"] / df2.groupby("variable")["value"].transform("sum")
     # )
     df2.rename(columns={"value": "% Market Shares"}, inplace=True)
-    df2["Country"] = df2.Entity + "-" + df2.Code
+    df2["Country_Code"] = df2.Country + "-" + df2.Code
     df2.rename(columns={"variable": "stage"}, inplace=True)
     ##
     df3 = pd.read_csv("./data/newly-funded-artificial-intelligence-companies.csv")
@@ -65,7 +65,7 @@ def get_components_page2():
         df2,
         y="Code",
         x="% Market Shares",
-        color="Country",
+        color="Country_Code",
         facet_col="stage",
         facet_col_wrap=2,
         orientation="h",
